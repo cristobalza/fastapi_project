@@ -54,7 +54,9 @@ def update_post(id:int, post: Post):
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"id post : {id} was not found.")
 
-
+###################################
+# Helpers
+###################################
 
 def find_post(id:int):
     for p in my_posts:
