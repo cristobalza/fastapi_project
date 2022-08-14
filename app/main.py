@@ -1,7 +1,7 @@
 from random import randrange
 from fastapi import FastAPI, Response, status, HTTPException
 from fastapi.params import Body
-from post import Post
+from .post import Post
 
 app  = FastAPI()
 
