@@ -8,15 +8,12 @@ from fastapi.security import OAuth2PasswordBearer
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
-#SECRET_KEY
-#ALGORITHM
-#Expiration time of token
-
 SECRET_KEY = settings.token_secret_key
 ALGORITHM = settings.token_algorithm
 TOKEN_EXPIRE_MINUTES = settings.token_expiration_time_minutes
 
 def create_access_token(data: dict):
+    
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
