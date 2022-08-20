@@ -15,7 +15,7 @@ def login(user_credentials: schemas.UserLogin,
         message = f"Invalid credentials."
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=message)
 
-    # compare attempted password's hash with the models.User.email hash
+    # compare attempted password's hash with the user.email hash
     if utils.verify(user_credentials.password, user.password) is False:
         message = f"Invalid credentials."
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=message)
