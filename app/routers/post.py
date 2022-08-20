@@ -1,5 +1,5 @@
 from typing import List
-from .. import schemas, models
+from .. import schemas, models, oath2
 from fastapi import status, HTTPException, Depends, Response, APIRouter
 from sqlalchemy.orm import Session
 from ..database import get_db
@@ -10,13 +10,18 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=List[schemas.PostOut])
-def get_posts(db: Session = Depends(get_db)):
+def get_posts(db: Session = Depends(get_db), 
+              user: int = Depends(oath2.get_current_user)):
+            
     posts = db.query(models.Post).all()
     return posts
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostOut)
 def create_posts(post: schemas.PostCreate,
-                 db: Session = Depends(get_db)):
+                 db: Session = Depends(get_db),
+                 user: int = Depends(oath2.get_current_user)):
+    
+    print(user)
     new_post =  models.Post(**post.dict())
     db.add(new_post) # stage new post and add to db
     db.commit()  # commit to db
@@ -26,7 +31,9 @@ def create_posts(post: schemas.PostCreate,
 
 @router.get('/{id}', response_model=schemas.PostOut)
 def get_post(id:int, 
-             db: Session = Depends(get_db)):
+             db: Session = Depends(get_db),
+             user: int = Depends(oath2.get_current_user)):
+    
     post = db.query(models.Post).filter(models.Post.id == id).first()
     if not post:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -35,7 +42,9 @@ def get_post(id:int,
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id:int,
-                db: Session = Depends(get_db)):
+                db: Session = Depends(get_db),
+                user: int = Depends(oath2.get_current_user)):
+    
     post_query  = db.query(models.Post).filter(models.Post.id == id)
     if post_query.first() is None:
         message = f"id post : {id} was not found."
@@ -50,7 +59,9 @@ def delete_post(id:int,
 @router.put("/{id}", response_model=schemas.PostOut)
 def update_post(id:int,
                 post: schemas.PostCreate,
-                db: Session = Depends(get_db)):
+                db: Session = Depends(get_db),
+                user: int = Depends(oath2.get_current_user)):
+    
     post_query = db.query(models.Post).filter(models.Post.id == id)
     if post_query.first() is None:
         message = f"id post : {id} was not found."
