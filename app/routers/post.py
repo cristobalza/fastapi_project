@@ -4,14 +4,17 @@ from fastapi import status, HTTPException, Depends, Response, APIRouter
 from sqlalchemy.orm import Session
 from ..database import get_db
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/posts", 
+    tags=['Posts']
+)
 
-@router.get("/posts", response_model=List[schemas.PostOut])
+@router.get("/", response_model=List[schemas.PostOut])
 def get_posts(db: Session = Depends(get_db)):
     posts = db.query(models.Post).all()
     return posts
 
-@router.post("/posts", status_code=status.HTTP_201_CREATED, response_model=schemas.PostOut)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.PostOut)
 def create_posts(post: schemas.PostCreate,
                  db: Session = Depends(get_db)):
     new_post =  models.Post(**post.dict())
@@ -21,7 +24,7 @@ def create_posts(post: schemas.PostCreate,
     
     return new_post
 
-@router.get('/posts/{id}', response_model=schemas.PostOut)
+@router.get('/{id}', response_model=schemas.PostOut)
 def get_post(id:int, 
              db: Session = Depends(get_db)):
     post = db.query(models.Post).filter(models.Post.id == id).first()
@@ -30,7 +33,7 @@ def get_post(id:int,
                             detail=f"post with id : {id} was not found.")
     return post
 
-@router.delete("/posts/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_post(id:int,
                 db: Session = Depends(get_db)):
     post_query  = db.query(models.Post).filter(models.Post.id == id)
@@ -39,13 +42,12 @@ def delete_post(id:int,
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=message)
     else:
-        # conn.commit() # every time we make a change to db
         post_query.delete(synchronize_session=False)
         db.commit()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
         
 
-@router.put("/posts/{id}", response_model=schemas.PostOut)
+@router.put("/{id}", response_model=schemas.PostOut)
 def update_post(id:int,
                 post: schemas.PostCreate,
                 db: Session = Depends(get_db)):

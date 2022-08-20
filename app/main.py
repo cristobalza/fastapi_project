@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from . import models
 from .database import engine
-from .routers import post, user
+from .routers import post, user, auth
 
 # Whenever we start the application, SQLAlchemy will do either one of the folowing:
 # 1. If there is a table with the names in models.py, it will do nothing
@@ -12,6 +12,7 @@ app  = FastAPI()
 
 app.include_router(post.router)
 app.include_router(user.router)
+app.include_router(auth.router)
 
 @app.get("/")
 def root(): 
