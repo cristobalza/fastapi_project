@@ -15,7 +15,7 @@ class Post(Base):
                         server_default=text('now()'))
     owner_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     
-    owner = relationship("User") # returns class User. Not the table "users". Figure it out relationship with User.
+    owner = relationship("User") # returns class User. Not the table "users". Figures it out relationship with User.
     
 class User(Base):
     __tablename__ = "users"
