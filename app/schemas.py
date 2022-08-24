@@ -1,7 +1,7 @@
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
-
+from pydantic.types import conint
 ################################
 # Users
 ################################
@@ -51,3 +51,10 @@ class Token(BaseModel):
  
 class TokenData(BaseModel):
     id: Optional[str] = None
+    
+################################
+# Votes
+################################
+class VoteBase(BaseModel):
+    post_id: int
+    direction: conint(le=1) # 0 or 1 
