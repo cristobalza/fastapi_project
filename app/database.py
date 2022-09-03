@@ -3,10 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from .config import settings
 
-DB_USERNAME= settings.db_username
-DB_PASSWORD= settings.db_password
-DB_HOSTNAME= settings.db_hostname
-DB_NAME= settings.db_name
+DB_USERNAME= settings.database_username
+DB_PASSWORD= settings.database_password
+DB_HOSTNAME= settings.database_hostname
+DB_NAME= settings.database_name
 # Specify Postgres Database location
 # SQLALCHEMY_DATABASE_URL = 'postgresql://<username>:<password>@<ip-address/hostname>/<database_name>'
 SQLALCHEMY_DATABASE_URL=f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOSTNAME}/{DB_NAME}'

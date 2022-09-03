@@ -8,10 +8,10 @@ from alembic import context
 from app.models import Base
 from app.config import settings
 
-DB_USERNAME= settings.db_username
-DB_PASSWORD= settings.db_password
-DB_HOSTNAME= settings.db_hostname
-DB_NAME= settings.db_name
+DB_USERNAME= settings.database_username
+DB_PASSWORD= settings.database_password
+DB_HOSTNAME= settings.database_hostname
+DB_NAME= settings.database_name
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
