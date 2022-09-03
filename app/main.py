@@ -12,7 +12,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app  = FastAPI()
 
-origins = ['https://www.google.com']
+origins = ['*']
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins, # what domains can talk to
